@@ -4,8 +4,7 @@
 	<title>Unicode Fraction Creator</title>
 	<link rel="stylesheet" href="main.css">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.3.1/dist/semantic.min.css">
-	<script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.3.1/dist/semantic.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 	<script src="math.js"></script>
 </head>
 <body>
@@ -14,40 +13,44 @@
 		<h1>Unicode Fraction Creator</h1>
 		<p>by <a href="https://lights0123.com">Ben Schattinger</a></p>
 	</div>
-	<br />
-	<div class="ui two column stackable grid">
-		<div class="column">
-			<div class="ui fluid labeled input">
-				<div class="ui basic label">
-					Numerator
+	<br/>
+	<div class="ui two column centered stackable grid" id="app">
+		<div class="row">
+			<div class="column">
+				<div class="ui fluid labeled input">
+					<div class="ui basic label">
+						Numerator
+					</div>
+					<input placeholder="Numerator" type="text" v-model="numerator">
 				</div>
-				<input placeholder="Numerator" type="text">
+			</div>
+			<div class="column">
+				<div class="ui fluid labeled input">
+					<div class="ui basic label">
+						Denominator
+					</div>
+					<input placeholder="Denominator" type="text" v-model="denominator">
+				</div>
 			</div>
 		</div>
-		<div class="column">
-			<div class="ui fluid labeled input">
-				<div class="ui basic label">
-					Denominator
+		<div class="equal width row">
+			<div class="column">
+				<div class="ui fluid labeled action input">
+					<div class="ui basic label" v-if="simplified">
+						Original
+					</div>
+					<input value="Search..." type="text" readonly>
+					<button class="ui right labeled icon button"><i class="copy outline icon"></i> Copy</button>
 				</div>
-				<input placeholder="Denominator" type="text">
 			</div>
-		</div>
-		<div class="column">
-			<div class="ui fluid labeled action input">
-				<div class="ui basic label">
-					Original
+			<div class="column" v-if="simplified">
+				<div class="ui fluid labeled action input">
+					<div class="ui basic label">
+						Simplified
+					</div>
+					<input value="Search..." type="text" readonly>
+					<button class="ui right labeled icon button"><i class="copy outline icon"></i> Copy</button>
 				</div>
-				<input value="Search..." type="text" readonly>
-				<button class="ui right labeled icon button"><i class="copy outline icon"></i> Copy</button>
-			</div>
-		</div>
-		<div class="column">
-			<div class="ui fluid labeled action input">
-				<div class="ui basic label">
-					Simplified
-				</div>
-				<input value="Search..." type="text" readonly>
-				<button class="ui right labeled icon button"><i class="copy outline icon"></i> Copy</button>
 			</div>
 		</div>
 	</div>
