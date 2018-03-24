@@ -15,35 +15,14 @@ function reduce(numerator, denominator) {
 	return [numerator / gcd, denominator / gcd];
 }
 
-
 /**
- * From https://stackoverflow.com/a/30810322
- * Copies text into clipboard
+ * Returns if copying is supported by the browser
+ * from https://github.com/zenorocha/clipboard.js/blob/f42b57067d461f5a8c71deec9818670f0c71d818/src/clipboard.js#L87
  *
- * @param text  the text to copy
- * @param cb    the callback with the result of the copy
+ * @returns {boolean}
  */
-function copyTextToClipboard(text, cb) {
-	if (!navigator.clipboard) {
-		var textArea = document.createElement("textarea");
-		textArea.value = text;
-		document.body.appendChild(textArea);
-		textArea.focus();
-		textArea.select();
-		var success = false;
-		try {
-			success = document.execCommand('copy');
-			document.body.removeChild(textArea);
-		} catch (e) {
-			document.body.removeChild(textArea);
-			cb(e);
-			return;
-		}
-		if (!success) cb(new Error("Copy Failed"));
-		else cb();
-		return;
-	}
-	navigator.clipboard.writeText(text).then(cb, cb);
+function isCopySupported() {
+	return document.queryCommandSupported && document.queryCommandSupported('copy');
 }
 
 var superscript = {
@@ -183,67 +162,50 @@ function getFraction(numerator, denominator) {
 var app = new Vue({
 	el: '#app',
 	data: {
-		fractionForm: '',
-		simplified: '',
+		original: {
+			fractionForm: '',
+			copyText: 'Copy',
+			copyIcon: 'copy outline'
+		},
+		simplified: {
+			fractionForm: '',
+			copyText: 'Copy',
+			copyIcon: 'copy outline'
+		},
 		numerator: '',
-		denominator: '',
-		origFracText: 'Copy',
-		origFracIcon: 'copy outline',
-		simpText: 'Copy',
-		simpIcon: 'copy outline'
+		denominator: ''
 	},
 	watch: {
 		numerator: function (numerator) {
 			try {
 				var frac = getFraction(numerator, this.denominator);
-				this.fractionForm = frac[0];
-				this.simplified = frac[1];
-				console.log(frac);
+				this.original.fractionForm = frac[0];
+				this.simplified.fractionForm = frac[1];
 			} catch (e) {
 
 			}
 		}, denominator: function (denominator) {
 			try {
 				var frac = getFraction(this.numerator, denominator);
-				this.fractionForm = frac[0];
-				this.simplified = frac[1];
+				this.original.fractionForm = frac[0];
+				this.simplified.fractionForm = frac[1];
 			} catch (e) {
 
 			}
 		}
 	},
 	methods: {
-		copyOrig: function () {
-			var self = this;
-			copyTextToClipboard(this.fractionForm, function (err) {
-				if (err) {
-					self.origFracText = 'Error';
-					self.origFracIcon = 'exclamation triangle';
-				} else {
-					self.origFracText = 'Copied';
-					self.origFracIcon = 'check';
-				}
-			})
+		copySuccess: function (obj) {
+			obj.copyText = 'Copied';
+			obj.copyIcon = 'check';
 		},
-		copySimp: function () {
-			var self = this;
-			copyTextToClipboard(this.simplified, function (err) {
-				if (err) {
-					self.simpText = 'Error';
-					self.simpIcon = 'exclamation triangle';
-				} else {
-					self.simpText = 'Copied';
-					self.simpIcon = 'check';
-				}
-			})
+		copyFail: function (obj) {
+			obj.copyText = 'Error';
+			obj.copyIcon = 'exclamation triangle';
 		},
-		origFracReset: function () {
-			this.origFracText = 'Copy';
-			this.origFracIcon = 'copy outline';
-		},
-		simpReset: function () {
-			this.simpText = 'Copy';
-			this.simpIcon = 'copy outline';
+		copyReset: function (obj) {
+			obj.copyText = 'Copy';
+			obj.copyIcon = 'copy outline';
 		}
 	}
 });

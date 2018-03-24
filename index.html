@@ -1,11 +1,13 @@
 <!DOCTYPE html>
-<html xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<html xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:v-bind="http://www.w3.org/1999/xhtml"
+	  xmlns:v-clipboard="http://www.w3.org/1999/xhtml">
 <head>
 	<title>Unicode Fraction Creator</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="main.css">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.3.1/dist/semantic.min.css">
 	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/vue-clipboard2@0.1.0/dist/vue-clipboard.min.js"></script>
 </head>
 <body>
 <div class="ui text container">
@@ -36,26 +38,30 @@
 		<div class="equal width row">
 			<div class="column">
 				<div class="ui fluid labeled action input">
-					<div class="ui basic label" v-if="simplified">
+					<div class="ui basic label" v-if="simplified.fractionForm">
 						Original
 					</div>
-					<input value="" type="text" readonly v-model="fractionForm">
-					<button class="ui right labeled icon button" v-on:click="copyOrig" v-on:mouseout="origFracReset"><i
-																						  v-bind:class="[origFracIcon]"
-																						  class="icon"></i>
-						{{origFracText}}
+					<input value="" type="text" readonly v-model="original.fractionForm">
+					<button class="ui right labeled icon button" v-clipboard:copy="original.fractionForm"
+							v-clipboard:success="copySuccess.bind(this,original)"
+							v-clipboard:error="copyFail.bind(this,original)" v-on:mouseout="copyReset(original)"><i
+							v-bind:class="[original.copyIcon]"
+							class="icon"></i>
+						{{original.copyText}}
 					</button>
 				</div>
 			</div>
-			<div class="column" v-if="simplified">
+			<div class="column" v-if="simplified.fractionForm">
 				<div class="ui fluid labeled action input">
 					<div class="ui basic label">
 						Simplified
 					</div>
-					<input value="" type="text" readonly v-model="simplified">
-					<button class="ui right labeled icon button" v-on:click="copySimp" v-on:mouseout="simpReset"><i
-																						  v-bind:class="[simpIcon]"
-																						  class="icon"></i> {{simpText}}
+					<input value="" type="text" readonly v-model="simplified.fractionForm">
+					<button class="ui right labeled icon button" v-clipboard:copy="simplified.fractionForm"
+							v-clipboard:success="copySuccess.bind(this,simplified)"
+							v-clipboard:error="copyFail.bind(this,simplified)" v-on:mouseout="copyReset(simplified)"><i
+							v-bind:class="[simplified.copyIcon]"
+							class="icon"></i> {{simplified.copyText}}
 					</button>
 				</div>
 			</div>
