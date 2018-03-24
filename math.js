@@ -159,6 +159,17 @@ function getFraction(numerator, denominator) {
 	return [orig, simp];
 }
 
+function updateFraction() {
+	try {
+		var frac = getFraction(this.numerator, this.denominator);
+		this.original.fractionForm = frac[0];
+		this.simplified.fractionForm = frac[1];
+		this.inputError = false;
+	} catch (e) {
+		this.inputError = true;
+	}
+}
+
 var app = new Vue({
 	el: '#app',
 	data: {
@@ -173,26 +184,13 @@ var app = new Vue({
 			copyIcon: 'copy outline'
 		},
 		numerator: '',
-		denominator: ''
+		denominator: '',
+		copySupported: isCopySupported(),
+		inputError: false
 	},
 	watch: {
-		numerator: function (numerator) {
-			try {
-				var frac = getFraction(numerator, this.denominator);
-				this.original.fractionForm = frac[0];
-				this.simplified.fractionForm = frac[1];
-			} catch (e) {
-
-			}
-		}, denominator: function (denominator) {
-			try {
-				var frac = getFraction(this.numerator, denominator);
-				this.original.fractionForm = frac[0];
-				this.simplified.fractionForm = frac[1];
-			} catch (e) {
-
-			}
-		}
+		numerator: updateFraction,
+		denominator: updateFraction
 	},
 	methods: {
 		copySuccess: function (obj) {

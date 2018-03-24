@@ -15,8 +15,18 @@
 		<h1>Unicode Fraction Creator</h1>
 		<p>by <a href="https://lights0123.com">Ben Schattinger</a></p>
 	</div>
-	<br/>
-	<div class="ui two column centered stackable grid" id="app">
+	<br/><div id="app">
+	<div class="ui pointing below red basic label" v-if="inputError">
+		Unfortunately, some of the characters that you have used are not supported in fraction form. Please only use:
+		<ul>
+			<li>numbers 0-9</li>
+			<li>spaces, plus, minus, equals, parenthesis</li>
+			<li>limited lowercase letters (a, e, h, i, j, k, l, m, n, o, p, r, s, t, u, v, x are supported in both the
+				numerator and denominator)
+			</li>
+		</ul>
+	</div>
+	<div class="ui two column centered stackable grid">
 		<div class="row">
 			<div class="column">
 				<div class="ui fluid labeled input">
@@ -45,7 +55,7 @@
 					<button class="ui right labeled icon button" v-clipboard:copy="original.fractionForm"
 							v-clipboard:success="copySuccess.bind(this,original)"
 							v-clipboard:error="copyFail.bind(this,original)" v-on:mouseout="copyReset(original)"><i
-							v-bind:class="[original.copyIcon]"
+							v-bind:class="[original.copyIcon]" v-if="copySupported"
 							class="icon"></i>
 						{{original.copyText}}
 					</button>
@@ -60,13 +70,13 @@
 					<button class="ui right labeled icon button" v-clipboard:copy="simplified.fractionForm"
 							v-clipboard:success="copySuccess.bind(this,simplified)"
 							v-clipboard:error="copyFail.bind(this,simplified)" v-on:mouseout="copyReset(simplified)"><i
-							v-bind:class="[simplified.copyIcon]"
+							v-bind:class="[simplified.copyIcon]" v-if="copySupported"
 							class="icon"></i> {{simplified.copyText}}
 					</button>
 				</div>
 			</div>
 		</div>
-	</div>
+	</div></div>
 	<script src="math.js" charset="UTF-8"></script>
 </div>
 </body>
