@@ -4,80 +4,120 @@
 <head>
 	<title>Unicode Fraction Creator</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<meta name="description" content="Create Unicode fractions with any numerator and denominator. Copy and paste into
+text messages, social media posts, or email.">
 	<link rel="stylesheet" href="main.css">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.3.1/dist/semantic.min.css">
 	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/vue-clipboard2@0.1.0/dist/vue-clipboard.min.js"></script>
 </head>
 <body>
-<div class="ui text container">
-	<div class="ui center aligned container">
+<span id="forkongithub"><a href="https://github.com/codepo8/css-fork-on-github-ribbon">Fork this on GitHub!</a></span>
+<main class="ui text container">
+	<header class="ui center aligned container">
 		<h1>Unicode Fraction Creator</h1>
 		<p>by <a href="https://lights0123.com">Ben Schattinger</a></p>
-	</div>
-	<br/><div id="app">
-	<div class="ui pointing below red basic label" v-if="inputError">
-		Unfortunately, some of the characters that you have used are not supported in fraction form. Please only use:
-		<ul>
-			<li>numbers 0-9</li>
-			<li>spaces, plus, minus, equals, parenthesis</li>
-			<li>limited lowercase letters (a, e, h, i, j, k, l, m, n, o, p, r, s, t, u, v, x are supported in both the
-				numerator and denominator)
-			</li>
-		</ul>
-	</div>
-	<div class="ui two column centered stackable grid">
-		<div class="row">
-			<div class="column">
-				<div class="ui fluid labeled input">
-					<div class="ui basic label">
-						Numerator
+	</header>
+	<br/>
+	<div id="app">
+		<div class="ui pointing below red basic label" v-if="inputError">
+			Unfortunately, some of the characters that you have used are not supported in fraction form. Please only
+			use:
+			<ul>
+				<li>numbers 0-9</li>
+				<li>spaces, plus, minus, equals, parenthesis</li>
+				<li>limited lowercase letters (a, e, h, i, j, k, l, m, n, o, p, r, s, t, u, v, x are supported in both
+					the
+					numerator and denominator)
+				</li>
+			</ul>
+		</div>
+		<div class="ui two column centered stackable grid">
+			<div class="row">
+				<div class="column">
+					<div class="ui fluid labeled input">
+						<div class="ui basic label">
+							Numerator
+						</div>
+						<input placeholder="Numerator" type="text" v-model="numerator">
 					</div>
-					<input placeholder="Numerator" type="text" v-model="numerator">
+				</div>
+				<div class="column">
+					<div class="ui fluid labeled input">
+						<div class="ui basic label">
+							Denominator
+						</div>
+						<input placeholder="Denominator" type="text" v-model="denominator">
+					</div>
 				</div>
 			</div>
-			<div class="column">
-				<div class="ui fluid labeled input">
-					<div class="ui basic label">
-						Denominator
+			<div class="equal width row">
+				<div class="column">
+					<div class="ui fluid labeled action input">
+						<div class="ui basic label" v-if="simplified.fractionForm">
+							Original
+						</div>
+						<input value="" type="text" readonly v-model="original.fractionForm">
+						<button class="ui right labeled icon button" v-clipboard:copy="original.fractionForm"
+								v-clipboard:success="copySuccess.bind(this,original)"
+								v-clipboard:error="copyFail.bind(this,original)" v-on:mouseout="copyReset(original)"><i
+								v-bind:class="[original.copyIcon]" v-if="copySupported"
+								class="icon"></i>
+							{{original.copyText}}
+						</button>
 					</div>
-					<input placeholder="Denominator" type="text" v-model="denominator">
+				</div>
+				<div class="column" v-if="simplified.fractionForm">
+					<div class="ui fluid labeled action input">
+						<div class="ui basic label">
+							Simplified
+						</div>
+						<input value="" type="text" readonly v-model="simplified.fractionForm">
+						<button class="ui right labeled icon button" v-clipboard:copy="simplified.fractionForm"
+								v-clipboard:success="copySuccess.bind(this,simplified)"
+								v-clipboard:error="copyFail.bind(this,simplified)"
+								v-on:mouseout="copyReset(simplified)"><i
+								v-bind:class="[simplified.copyIcon]" v-if="copySupported"
+								class="icon"></i> {{simplified.copyText}}
+						</button>
+					</div>
 				</div>
 			</div>
 		</div>
-		<div class="equal width row">
-			<div class="column">
-				<div class="ui fluid labeled action input">
-					<div class="ui basic label" v-if="simplified.fractionForm">
-						Original
-					</div>
-					<input value="" type="text" readonly v-model="original.fractionForm">
-					<button class="ui right labeled icon button" v-clipboard:copy="original.fractionForm"
-							v-clipboard:success="copySuccess.bind(this,original)"
-							v-clipboard:error="copyFail.bind(this,original)" v-on:mouseout="copyReset(original)"><i
-							v-bind:class="[original.copyIcon]" v-if="copySupported"
-							class="icon"></i>
-						{{original.copyText}}
-					</button>
+	</div>
+</main>
+<br/>
+<footer class="ui inverted vertical footer segment">
+	<div class="ui container">
+		<div class="ui stackable inverted divided equal height stackable grid">
+			<div class="three wide column">
+				<h4 class="ui inverted header">Ben Schattinger</h4>
+				<div class="ui inverted link list">
+					<a href="https://lights0123.com" class="item"><i class="globe icon"></i> My Website</a>
+					<a href="https://github.com/lights0123" class="item"><i class="github icon"></i> My GitHub</a>
 				</div>
 			</div>
-			<div class="column" v-if="simplified.fractionForm">
-				<div class="ui fluid labeled action input">
-					<div class="ui basic label">
-						Simplified
-					</div>
-					<input value="" type="text" readonly v-model="simplified.fractionForm">
-					<button class="ui right labeled icon button" v-clipboard:copy="simplified.fractionForm"
-							v-clipboard:success="copySuccess.bind(this,simplified)"
-							v-clipboard:error="copyFail.bind(this,simplified)" v-on:mouseout="copyReset(simplified)"><i
-							v-bind:class="[simplified.copyIcon]" v-if="copySupported"
-							class="icon"></i> {{simplified.copyText}}
-					</button>
+			<div class="three wide column">
+				<h4 class="ui inverted header">Copyright</h4>
+				<div class="ui inverted link list">
+					<a href="LICENSE" class="item"><i class="copyright outline icon"></i> Copyright 2018 Ben Schattinger
+						under the Apache 2.0 License.</a>
+					<a href="https://github.com/lights0123/fractions" class="item"><i class="icon github"></i> This
+						project is open source! Fork this on GitHub</a>
 				</div>
+			</div>
+			<div class="seven wide column">
+				<h4 class="ui inverted header">About</h4>
+				<p>This is a simple website designed to create <a
+						href="https://en.wikipedia.org/wiki/Unicode">Unicode</a> fractions. There are only a few
+					built-in fractions, which are very limited. This website will automatically create fractions using
+					superscript & subscript characters, that can be copied & pasted into text messages, social media
+					posts, emails, or other things.</p>
 			</div>
 		</div>
-	</div></div>
-	<script src="math.js" charset="UTF-8"></script>
-</div>
+	</div>
+</footer>
+<script src="math.js" charset="UTF-8"></script>
 </body>
 </html>
