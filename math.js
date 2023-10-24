@@ -106,6 +106,7 @@ var subscript = {
 };
 
 var fractions = {
+	'1/': '⅟',
 	'1/2': '½',
 	'1/3': '⅓',
 	'2/3': '⅔',
@@ -146,6 +147,7 @@ function getFraction(numerator, denominator) {
 			if (!correspondingNum) throw new Error();
 			denOut += correspondingNum;
 		});
+		if (num === "1") return fractions['1/'] + denOut;
 		return numOut + slash + denOut;
 	}
 
