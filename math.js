@@ -151,7 +151,7 @@ function getFraction(numerator, denominator) {
 
 	var orig = map(numerator, denominator);
 	var simp = '';
-	if (/^\d+$/.test(numerator) && /^\d+$/.test(denominator)) {
+	if (denominator != 0 && /^\d+$/.test(numerator) && /^\d+$/.test(denominator)) {
 		simp = reduce(numerator, denominator);
 		simp = map(simp[0].toString(), simp[1].toString());
 	}
